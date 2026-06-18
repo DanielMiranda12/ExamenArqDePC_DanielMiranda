@@ -1,0 +1,60 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: 'Examen Final - Despliegue de EC2 con Pagina Web'
+
+Parameters:
+  LatestAmiId:
+    Type: 'AWS::SSM::Parameter::Value<AWS::EC2::Image::Id>'
+    Default: '/aws/service/ami-amazon-linux-latest/al2023-ami-kernel-6.1-x86_64'
+
+Resources:
+  MySecurityGroup:
+    Type: 'AWS::EC2::SecurityGroup'
+    Properties:
+      GroupDescription: 'Habilitar puerto 80 para el examen'
+      SecurityGroupIngress:
+        - IpProtocol: tcp
+          FromPort: 80
+          ToPort: 80
+          CidrIp: 0.0.0.0/0
+
+  MyEC2Instance:
+    Type: 'AWS::EC2::Instance'
+    Properties:
+      InstanceType: t2.micro
+      ImageId: !Ref LatestAmiId
+      SecurityGroups:
+        - !Ref MySecurityGroup
+      UserData:
+        Fn::Base64: !Sub |
+          #!/bin/bash
+          dnf install -y httpd
+          systemctl start httpd
+          systemctl enable httpd
+          cat << 'EOF' > /var/www/html/index.html
+          <!DOCTYPE html>
+          <html lang="es">
+          <head>
+              <meta charset="UTF-8">
+              <title>Examen Final Arq</title>
+              <style>
+                  body { font-family: 'Segoe UI', sans-serif; text-align: center; background-color: #eef2f7; padding: 50px; }
+                  .card { background: white; padding: 40px; display: inline-block; border-radius: 12px; box-shadow: 0px 4px 15px rgba(0,0,0,0.1); }
+                  h1 { color: #cc0000; margin-bottom: 20px; }
+                  p { font-size: 18px; color: #333333; margin: 10px 0; }
+              </style>
+          </head>
+          <body>
+              <div class="card">
+                  <h1>Examen Final Arquitectura de Computadores</h1>
+                  <p><strong>Estudiante:</strong> Daniel Alexander Miranda Vega</p>
+                  <p><strong>Código:</strong> 0192086</p>
+              </div>
+              <script>
+                  console.log("Desplegado con éxito en el servidor Apache de AWS.");
+              </script>
+          </body>
+          </html>
+          EOF
+      Tags:
+        - Key: Name
+          Value: Daniel-EC2
