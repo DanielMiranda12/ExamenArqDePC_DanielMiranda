@@ -48,6 +48,9 @@ Resources:
                   <h1>Examen Final Arquitectura de Computadores</h1>
                   <p><strong>Estudiante:</strong> Daniel Alexander Miranda Vega</p>
                   <p><strong>Código:</strong> 0192086</p>
+                  <p><strong>Estudiante revisando el repositorio:</p>
+                  <p><strong>Estudiante:</strong> Oscar Ivan Becerra Ovallos</p>
+                  <p><strong>Código:</strong> 0192176</p>
               </div>
               <script>
                   console.log("Desplegado con éxito en el servidor Apache de AWS.");
